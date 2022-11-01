@@ -2,8 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Empresa;
+use App\Models\Persona;
+use App\Models\Producto;
+use App\Models\Categoria;
+use App\Models\SubCategoria;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,8 +20,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        $this->call([
-            DashboardTableSeeder::class,
-        ]);
+        Storage::deleteDirectory('public/productos');
+        Storage::makeDirectory('public/productos');
+        Storage::deleteDirectory('public/empresa');
+        Storage::makeDirectory('public/empresa');
+
+        $this->call(UserSeeder::class);
+        Categoria::factory(20)->create();
+        SubCategoria::factory(40)->create();
+        Producto::factory(100)->create();
+        Persona::factory(60)->create();
+        Empresa::factory(1)->create();
     }
 }

@@ -1,96 +1,150 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-
-// Import Chart.js
-import { Chart } from 'chart.js';
-
-// Import flatpickr
+import Swal from 'sweetalert2'
+import toastr from 'toastr'
 import flatpickr from 'flatpickr';
 
-// Import TailwindCSS variables
-import { tailwindConfig } from './utils';
-
-// import component from './components/component';
-import dashboardCard01 from './components/dashboard-card-01';
-import dashboardCard02 from './components/dashboard-card-02';
-import dashboardCard03 from './components/dashboard-card-03';
-import dashboardCard04 from './components/dashboard-card-04';
-import dashboardCard05 from './components/dashboard-card-05';
-import dashboardCard06 from './components/dashboard-card-06';
-import dashboardCard08 from './components/dashboard-card-08';
-import dashboardCard09 from './components/dashboard-card-09';
-import dashboardCard11 from './components/dashboard-card-11';
-
-// Call Alpine
 window.Alpine = Alpine;
+window.Swal = Swal;
+window.toastr = toastr;
+
 Alpine.start();
 
-
-// Define Chart.js default settings
-/* eslint-disable prefer-destructuring */
-Chart.defaults.font.family = '"Inter", sans-serif';
-Chart.defaults.font.weight = '500';
-Chart.defaults.color = tailwindConfig().theme.colors.slate[400];
-Chart.defaults.scale.grid.color = tailwindConfig().theme.colors.slate[100];
-Chart.defaults.plugins.tooltip.titleColor = tailwindConfig().theme.colors.slate[800];
-Chart.defaults.plugins.tooltip.bodyColor = tailwindConfig().theme.colors.slate[800];
-Chart.defaults.plugins.tooltip.backgroundColor = tailwindConfig().theme.colors.white;
-Chart.defaults.plugins.tooltip.borderWidth = 1;
-Chart.defaults.plugins.tooltip.borderColor = tailwindConfig().theme.colors.slate[200];
-Chart.defaults.plugins.tooltip.displayColors = false;
-Chart.defaults.plugins.tooltip.mode = 'nearest';
-Chart.defaults.plugins.tooltip.intersect = false;
-Chart.defaults.plugins.tooltip.position = 'nearest';
-Chart.defaults.plugins.tooltip.caretSize = 0;
-Chart.defaults.plugins.tooltip.caretPadding = 20;
-Chart.defaults.plugins.tooltip.cornerRadius = 4;
-Chart.defaults.plugins.tooltip.padding = 8;
-
-// Register Chart.js plugin to add a bg option for chart area
-Chart.register({
-  id: 'chartAreaPlugin',
-  // eslint-disable-next-line object-shorthand
-  beforeDraw: (chart) => {
-    if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-      const ctx = chart.canvas.getContext('2d');
-      const { chartArea } = chart;
-      ctx.save();
-      ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
-      // eslint-disable-next-line max-len
-      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-      ctx.restore();
-    }
-  },
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  flatpickr('.datepicker', {
-    mode: 'range',
-    static: true,
-    monthSelectorType: 'static',
-    dateFormat: 'M j, Y',
-    defaultDate: [new Date().setDate(new Date().getDate() - 6), new Date()],
+flatpickr('.datepicker', {
+    dateFormat: 'd-m-Y',
     prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-    onReady: (selectedDates, dateStr, instance) => {
-      // eslint-disable-next-line no-param-reassign
-      instance.element.value = dateStr.replace('to', '-');
-      const customClass = instance.element.getAttribute('data-class');
-      instance.calendarContainer.classList.add(customClass);
-    },
-    onChange: (selectedDates, dateStr, instance) => {
-      // eslint-disable-next-line no-param-reassign
-      instance.element.value = dateStr.replace('to', '-');
-    },
-  });
-  dashboardCard01();
-  dashboardCard02();
-  dashboardCard03();
-  dashboardCard04();
-  dashboardCard05();
-  dashboardCard06();
-  dashboardCard08();
-  dashboardCard09();
-  dashboardCard11();
 });
+
+const get_month = (value) => {
+    const nombreMes = {
+        'January': 'Enero',
+        'February': 'Febrero',
+        'March': 'Marzo',
+        'April': 'Abril',
+        'May': 'Mayo',
+        'June': 'Junio',
+        'July': 'Julio',
+        'August': 'Agosto',
+        'September': 'Septiembre',
+        'October': 'Octubre',
+        'November': 'Noviembre',
+        'December': 'Diciembre'
+    }
+    return nombreMes[value];
+}
+
+const get_day = value => {
+    const nombreDia = {
+        'Monday':  'Lunes',
+        'Tuesday': 'Martes',
+        'Wednesday': 'Miercoles',
+        'Thursday': 'Jueves',
+        'Friday': 'Viernes',
+        'Saturday': 'Sabado',
+        'Sunday': 'Domingo'
+    }
+    return nombreDia[value]
+}
+
+const fecha_inicio = document.querySelector('#fecha_inicio'),
+    fecha_fin = document.querySelector('#fecha_fin'),
+    btnBuscar = document.querySelector('#btnBuscar'),
+    btnLimpiar = document.querySelector('#btnLimpiar');
+
+    const peticion_ingresos_mes = async (fecha_inicio = '', fecha_fin = '') => {
+        try {
+            const response = await axios.post('/ingresos-mes', { fecha_inicio, fecha_fin });
+            if(response.data.length > 0){
+                let mes = response.data.map(item => {
+                    if(fecha_inicio == "" && fecha_fin == ""){
+                        return get_day(item.mes.substring(3, item.mes.length)) + ' - ' + item.mes.substring(0,2)
+                    }else{
+                        return item.mes;
+                    }
+                });
+                let total = response.data.map(item => item.total);
+                    var options = {
+                        chart: {
+                            "height": 300,
+                            "type": 'line',
+                        },
+                        series: [{
+                            name: 'Ingreso del Mes en Bs',
+                            data: total
+                        }],
+                        xaxis: {
+                            categories: mes
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        markers: {
+                            size: 6
+                        },
+                        fill: {
+                            type: 'gradient',
+                        }
+                    }
+                var chart = new ApexCharts(document.querySelector("#ingresosMes"), options);
+                chart.render();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const peticion_ingresos_anio = async() => {
+        try {
+            const response = await axios.post('ingresos-anio')
+            if(response.data.length > 0){
+                let mes = response.data.map(item => get_month(item.mes));
+                let total = response.data.map(item => item.total);
+                var options = {
+                    chart: {
+                        height: 300,
+                        type: 'bar',
+                    },
+                    series: [{
+                        name: 'Total Ingreso Bs',
+                        data: total
+                    }],
+                    xaxis: {
+                        categories: mes
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        bar: {
+                            distributed: true
+                        }
+                    },
+                }
+                const chartDia = new ApexCharts(document.querySelector("#ingresosAnio"), options);
+                chartDia.render();
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    peticion_ingresos_mes();
+    peticion_ingresos_anio();
+
+    if(btnBuscar){
+        btnBuscar.addEventListener('click', e => {
+            e.preventDefault();
+            peticion_ingresos_mes(fecha_inicio.value, fecha_fin.value);
+        });
+    }
+
+    if(btnLimpiar){
+        btnLimpiar.addEventListener('click', e => {
+            e.preventDefault();
+            fecha_inicio.value = '';
+            fecha_fin.value = '';
+            peticion_ingresos_mes();
+        });
+    }

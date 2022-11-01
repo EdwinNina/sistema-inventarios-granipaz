@@ -6,11 +6,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "arielcr/numero-a-letras": "dev-master",
+        "codedge/laravel-fpdf": "^1.9",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/jetstream": "^2.9",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "laraveles/spanish": "^1.5",
         "livewire/livewire": "^2.5"
     },
     "require-dev": {

@@ -20,7 +20,7 @@
         class="font-inter antialiased bg-slate-100 text-slate-600"
         :class="{ 'sidebar-expanded': sidebarExpanded }"
         x-data="{ sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }"
-        x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))"    
+        x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))"
     >
 
         <script>
@@ -49,6 +49,40 @@
 
         </div>
 
+        <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
         @livewireScripts
+
+        <script>
+            window.livewire.on('existe', (mensaje) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: mensaje,
+                })
+            })
+
+            window.livewire.on('successMessage', value => {
+                Livewire.emit('refreshData')
+                switch (value) {
+                    case 'crear':
+                        toastr.success('Correcto', 'Registro agregado correctamente');
+                        break;
+                    case 'actualizar':
+                        toastr.success('Correcto', 'Registro actualizado correctamente');
+                    break;
+                    case 'eliminar':
+                        toastr.success('Correcto', 'Registro eliminado correctamente');
+                    break;
+                    case 'anulacionCompra':
+                        toastr.success('Correcto', 'Se ha anulado la compra correctamente');
+                    break;
+                    case 'habilitarCompra':
+                        toastr.success('Correcto', 'Se ha habilitado nuevamente la compra');
+                    break;
+                }
+            });
+        </script>
     </body>
 </html>

@@ -6,6 +6,7 @@ module.exports = {
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './node_modules/flowbite/**/*.js'
     ],
 
     theme: {
@@ -66,5 +67,16 @@ module.exports = {
                 modifySelectors(({ className }) => `.sidebar-expanded .${e(`sidebar-expanded${separator}${className}`)}`);
             });
         }),
+        require("daisyui"),
+        require('flowbite/plugin')
     ],
+    daisyui: {
+        styled: true,
+        themes: false,
+        base: false,
+        utils: false,
+        logs: true,
+        rtl: false,
+        prefix: "",
+    },
 };

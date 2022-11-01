@@ -19,7 +19,11 @@
     "dependencies": {
         "chart.js": "^3.8.0",
         "chartjs-adapter-moment": "^1.0.0",
+        "daisyui": "^2.31.0",
         "flatpickr": "^4.6.13",
-        "moment": "^2.29.4"
+        "flowbite": "^1.5.3",
+        "moment": "^2.29.4",
+        "sweetalert2": "^11.5.1",
+        "toastr": "^2.1.4"
     }
 }

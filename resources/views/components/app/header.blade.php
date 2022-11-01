@@ -4,7 +4,7 @@
 
             <!-- Header: Left side -->
             <div class="flex">
-                
+
                 <!-- Hamburger button -->
                 <button
                     class="text-slate-500 hover:text-slate-600 lg:hidden"
@@ -24,22 +24,7 @@
 
             <!-- Header: Right side -->
             <div class="flex items-center space-x-3">
-
-                <!-- Search Button with Modal -->
-                <x-modal-search />
-
-                <!-- Notifications button -->
-                <x-dropdown-notifications align="right" />
-
-                <!-- Info button -->
-                <x-dropdown-help align="right" />
-
-                <!-- Divider -->
-                <hr class="w-px h-6 bg-slate-200" />
-
-                <!-- User button -->
                 <x-dropdown-profile align="right" />
-
             </div>
 
         </div>
