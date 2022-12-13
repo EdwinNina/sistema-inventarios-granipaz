@@ -37,12 +37,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/usuarios', function () { return view('pages.usuarios.index'); })->name('usuarios.index');
     Route::get('/roles', function () { return view('pages.roles.index'); })->name('roles.index');
 
-    // Route::get('/compras', [ComprasController::class, 'index'])->name('compras.index');
-    // Route::get('/compras/nuevaCompra', [ComprasController::class, 'create'])->name('compras.create');
-    // Route::post('/compras', [ComprasController::class, 'store'])->name('compras.store');
-    // Route::get('/compras/edit/{compra}', [ComprasController::class, 'edit'])->name('compras.edit');
-    // Route::put('/compras/{compra}', [ComprasController::class, 'update'])->name('compras.update');
-
     Route::resource('/compras', ComprasController::class)->names('compras')->except('show');
     Route::resource('/categorias', CategoriaController::class)->names('categorias')->except('show');
     Route::resource('/ventas', VentasController::class)->names('ventas')->except('show');

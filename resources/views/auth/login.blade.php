@@ -18,7 +18,7 @@
                 <x-jet-input id="password" type="password" name="password" required autocomplete="current-password" />
             </div>
         </div>
-        <div class="flex items-center justify-between mt-6">
+        <div class="flex items-center justify-end mt-6">
             {{-- @if (Route::has('password.request'))
                 <div class="mr-1">
                     <a class="text-sm underline hover:no-underline" href="{{ route('password.request') }}">

@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Compra;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Venta;
+use App\Models\Compra;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Gate;
 
 class UsuarioComponent extends Component
 {
@@ -16,6 +17,11 @@ class UsuarioComponent extends Component
 
     public $modalToggle = false;
     public $name = '', $email = '', $password = '', $usuario_id = '', $role_id = '';
+
+    public function mount()
+    {
+        Gate::authorize('checkAdminUser');
+    }
 
     public function render()
     {

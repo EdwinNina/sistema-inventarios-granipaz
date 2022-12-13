@@ -8,6 +8,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class EmpresaComponent extends Component
 {
@@ -16,6 +17,9 @@ class EmpresaComponent extends Component
     public $empresa, $nit, $direccion, $logotipo, $paterno, $materno, $nombre, $stock_minimo, $correo, $celular;
 
     public function mount(){
+
+        Gate::authorize('checkAdminUser', auth()->id());
+
         $empresa_count = Empresa::count();
         if($empresa_count > 0){
             $empresa = Empresa::first();

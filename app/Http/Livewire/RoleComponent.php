@@ -7,6 +7,7 @@ use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Gate;
 
 class RoleComponent extends Component
 {
@@ -14,6 +15,11 @@ class RoleComponent extends Component
 
     public $modalToggle = false;
     public $nombre = '', $descripcion = '', $role_id = '';
+
+    public function mount()
+    {
+        Gate::authorize('checkAdminUser', auth()->id());
+    }
 
     public function render()
     {
