@@ -4,10 +4,16 @@
     </header>
     <div class="p-3">
         <div class="px-3 flex mt-3 gap-10">
-            <select class="select select-bordered py-0" wire:model="filtrarCategoria">
+            <select class="select select-bordered py-0" wire:change="filtrarSubCategoria($event.target.value)">
                 <option value="" selected>Filtrar por categoria</option>
                 @foreach ($categorias as $categoria)
                     <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                @endforeach
+            </select>
+            <select class="select select-bordered py-0" wire:model.defer="sub_categoria_id">
+                <option value="" selected>Seleccione la subcategoria</option>
+                @foreach ($a_subcategorias as $subcategoria)
+                    <option value="{{ $subcategoria->id }}">{{ $subcategoria->nombre }}</option>
                 @endforeach
             </select>
             <div class="flex-1 relative">
@@ -47,10 +53,11 @@
                     @if (!empty($producto_seleccionado))
                         <section class="p-6 w-96 bg-white rounded-lg border border-gray-200 shadow-md">
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $producto_seleccionado['nombre']}}</h5>
-                            <p class="mb-3 font-normal text-gray-700">Precio de Compra: {{ $producto_seleccionado['precio_compra'] }}</p>
-                            <p class="mb-3 font-normal text-gray-700">Precio de Venta: {{ $producto_seleccionado['precio_venta'] }}</p>
-                            <p class="mb-3 font-normal text-gray-700">Categoria: {{ $producto_seleccionado['categoria']['nombre'] }}</p>
-                            <p class="mb-3 font-normal text-gray-700">Stock Actual: <span class="w-9 h-9 text-xs rounded-full flex justify-center items-center font-bold p-2 text-white {{ $producto_seleccionado['stock'] > $stock_minimo ? 'bg-green-500' : 'bg-red-500' }}">{{ $producto_seleccionado['stock'] }}</span>
+                            <p class="mb-3 font-normal text-gray-700">Detalle: {{ $producto_seleccionado['descripcion'] }}</p>
+                            <p class="mb-3 font-normal text-gray-700">Precio U.: {{ $producto_seleccionado['precio_unitario'] }}</p>
+                            <p class="mb-3 font-normal text-gray-700">SubCategoria: {{ $producto_seleccionado['subcategoria']['nombre'] }}</p>
+                            <p class="mb-3 font-normal text-gray-700">Stock Actual:
+                                <span class=" text-sm font-bold p-2 {{ $producto_seleccionado['stock'] > $stock_minimo ? 'text-green-500' : 'text-red-500' }}">{{ $producto_seleccionado['stock'] }}</span>
                             </p>
                         </section>
                     @endif
@@ -59,7 +66,7 @@
                             <div class="flex justify-between items-center p-4">
                                 <section class="flex gap-5 items-end">
                                     <div>
-                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fecha de Compra</label>
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fecha Inicio</label>
                                         <div class="relative">
                                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                                                 @include('components/icons/date')
@@ -70,7 +77,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fecha de Compra</label>
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Fecha Fin</label>
                                         <div class="relative">
                                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                                                 @include('components/icons/date')
@@ -124,10 +131,10 @@
                                             <td class="py-4 px-3">{{ $kardex->fecha }}</td>
                                             <td class="py-4">{{ $kardex->detalle }}</td>
                                             <td class="py-4 text-center bg-blue-200">{{ $kardex->cantidad_ingreso }}</td>
-                                            <td class="py-4 text-center bg-blue-200">{{ $kardex->precio_ingreso }}</td>
+                                            <td class="py-4 text-center bg-blue-200">{{ $kardex->precio_unitario }}</td>
                                             <td class="py-4 text-center bg-blue-200">{{ $kardex->subtotal_ingreso }}</td>
                                             <td class="py-4 text-center bg-orange-200">{{ $kardex->cantidad_salida }}</td>
-                                            <td class="py-4 text-center bg-orange-200">{{ $kardex->precio_salida }}</td>
+                                            <td class="py-4 text-center bg-orange-200">{{ $kardex->precio_unitario }}</td>
                                             <td class="py-4 text-center bg-orange-200">{{ $kardex->subtotal_salida }}</td>
                                             <td class="py-4 text-center bg-green-200">{{ $kardex->stock }}</td>
                                         </tr>

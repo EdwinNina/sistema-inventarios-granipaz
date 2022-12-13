@@ -36,9 +36,9 @@ class ListadoVentasComponent extends Component
         $this->modalToggle = true;
     }
 
-    public function cambiarEstadoCompra(Venta $venta, $tipo)
+    public function cambiarEstadoVenta(Venta $venta, $tipo)
     {
-        $detalle_venta = DetalleVenta::where('compra_id', $venta->id)->get();
+        $detalle_venta = DetalleVenta::where('venta_id', $venta->id)->get();
 
         foreach ($detalle_venta as $detalle) {
             $producto = Producto::find($detalle['producto_id']);

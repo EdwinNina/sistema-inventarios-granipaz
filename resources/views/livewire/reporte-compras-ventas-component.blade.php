@@ -37,9 +37,14 @@
             <thead
                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
+                    <th scope="col" class="py-3 px-6 w-36">Fecha</th>
                     <th scope="col" class="py-3 px-6">Producto</th>
-                    <th scope="col" class="py-3 px-6">Cantidad</th>
-                    <th scope="col" class="py-3 px-6">Precio </th>
+                    <th scope="col" class="py-3 px-6">Detalle</th>
+                    <th scope="col" class="py-3 px-6">Cantidad Mts Total</th>
+                    @if ($tipo === 'VENTA')
+                        <th scope="col" class="py-3 px-6">Medida</th>
+                    @endif
+                    <th scope="col" class="py-3 px-6">Precio</th>
                     <th scope="col" class="py-3 px-6">Total(Bs)</th>
                 </tr>
             </thead>
@@ -47,10 +52,13 @@
                 @if (count($datos) > 0)
                     @foreach ($datos as $dato)
                         <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="py-4 px-6 text-sm font-bold w-36">{{ $dato->fecha }}</td>
                             <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{{ Str::title($dato->nombre) }}</td>
-                            <td class="py-4 px-6">
-                                <span class="w-10 h-10 text-xs rounded-full flex justify-center items-center font-bold text-white bg-green-500">{{ $dato->cantidad }}</span>
-                            </td>
+                            <td class="py-4 px-6 text-sm">{{ $dato->descripcion }}</td>
+                            <td class="py-4 px-6 text-sm font-bold">{{ $dato->cantidad }}</td>
+                            @if ($tipo === 'VENTA')
+                                <td class="py-4 px-6">{{ $dato->medida ?? '----' }}</td>
+                            @endif
                             <td class="py-4 px-6">{{ $dato->precio }}</td>
                             <td class="py-4 px-6 font-bold text-gray-900">{{ $dato->total }}</td>
                         </tr>

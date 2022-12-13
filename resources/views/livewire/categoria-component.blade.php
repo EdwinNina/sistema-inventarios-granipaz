@@ -33,25 +33,28 @@
                                         title="Editar Categoria">
                                         @include('components/icons/edit')
                                     </a>
-                                    <button type="button" class="bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                        wire:click="actualizarEstado({{ $categoria->id }})"
-                                        title="Habilitar/Deshabilitar Categoria">
-                                        @if ($categoria->estado)
-                                            @include('components/icons/enable')
-                                        @else
-                                            @include('components/icons/disable')
-                                        @endif
-                                    </button>
                                     <button type="button" class="bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
                                         wire:click="mostrarSubCategorias({{ $categoria->id }})"
                                         title="Mostrar Sub Categorias">
                                             @include('components/icons/category')
                                     </button>
-                                    <button type="button" class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                        wire:click="eliminarCategoria({{ $categoria->id }})"
-                                        title="Eliminar Categoria">
-                                            @include('components/icons/delete')
-                                    </button>
+
+                                    @if ($check_user_role)
+                                        <button type="button" class="bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                            wire:click="actualizarEstado({{ $categoria->id }})"
+                                            title="Habilitar/Deshabilitar Categoria">
+                                            @if ($categoria->estado)
+                                                @include('components/icons/enable')
+                                            @else
+                                                @include('components/icons/disable')
+                                            @endif
+                                        </button>
+                                        <button type="button" class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                            wire:click="eliminarCategoria({{ $categoria->id }})"
+                                            title="Eliminar Categoria">
+                                                @include('components/icons/delete')
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

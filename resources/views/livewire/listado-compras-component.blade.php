@@ -56,19 +56,22 @@
                                             @include('components/icons/print')
                                         </button>
                                     </form>
-                                    @if ($compra->estado)
-                                        <button type="button" title="Anular la Compra"
-                                            class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                            wire:click="cambiarEstadoCompra({{ $compra->id }}, 'anularCompra')">
-                                            @include('components/icons/cancel')
-                                        </button>
-                                    @else
-                                        <button type="button" title="Habilitar Compra"
-                                            class="bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                            wire:click="cambiarEstadoCompra({{ $compra->id }}, 'habilitarCompra')">
-                                            @include('components/icons/enable-purchase')
-                                        </button>
+                                    @if ($check_user_role)
+                                        @if ($compra->estado)
+                                            <button type="button" title="Anular la Compra"
+                                                class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                                wire:click="cambiarEstadoCompra({{ $compra->id }}, 'anularCompra')">
+                                                @include('components/icons/cancel')
+                                            </button>
+                                        @else
+                                            <button type="button" title="Habilitar Compra"
+                                                class="bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                                wire:click="cambiarEstadoCompra({{ $compra->id }}, 'habilitarCompra')">
+                                                @include('components/icons/enable-purchase')
+                                            </button>
+                                        @endif
                                     @endif
+
                                 </div>
                             </td>
                         </tr>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nombre', 60);
             $table->text('descripcion')->nullable();
             $table->string('imagen', 100);
-            $table->integer('stock')->default(0);
+            $table->decimal('stock')->default(0);
             $table->decimal('precio_unitario', 8, 2);
             $table->boolean('estado')->default(true);
             $table->foreignId('sub_categoria_id')->constrained();

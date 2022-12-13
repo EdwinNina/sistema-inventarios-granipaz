@@ -10,12 +10,14 @@ use App\Models\Producto;
 use App\Models\DetalleVenta;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\VentasFormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class VentasController extends Controller
 {
     public $clientes = '';
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->clientes = Persona::where('estado', 1)
             ->where('tipo_persona', 'CLIENTE')
             ->select('id', 'empresa')
@@ -61,15 +63,16 @@ class VentasController extends Controller
             $detalle_venta = [];
 
             $venta = Venta::create([
-                'tipo_comprobante' => $validated['tipo_comprobante'],
                 'fecha' => Carbon::parse($validated['fecha'])->format('Y-m-d'),
-                'cliente_id' => $validated['cliente']
+                'cliente_id' => $validated['cliente'],
+                'user_id' => Auth::id()
             ]);
 
             foreach ($productos as $key => $producto) {
                 $subtotal = $producto['cantidad'] * $producto['precio'];
 
                 $detalle_venta[$key] = [
+                    'medida' => $producto['medida'],
                     'cantidad' => $producto['cantidad'],
                     'subtotal' => $subtotal,
                     'producto_id' => $producto['producto_id'],
@@ -92,14 +95,14 @@ class VentasController extends Controller
                 'nro_comprobante' => str_pad($venta->id, 10, "0", STR_PAD_LEFT),
                 'total' => array_sum($total_productos),
                 'cantidad' => array_sum($cantidad_productos),
+                'user_id' => Auth::id()
             ]);
 
             DB::commit();
-            return redirect()->route('ventas.index')->with('message','good');
+            return redirect()->route('ventas.index')->with('message', 'good');
         } catch (Exception $ex) {
             DB::rollback();
-            dd($ex);
-            return redirect()->route('ventas.create')->with('message','error');
+            return redirect()->route('ventas.create')->with('message', 'error');
         }
     }
 
@@ -113,10 +116,9 @@ class VentasController extends Controller
     {
         $detalle = DB::table('detalle_ventas')
             ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
-            ->select('detalle_ventas.id', 'detalle_ventas.cantidad', 'detalle_ventas.subtotal', 'detalle_ventas.producto_id', 'productos.nombre', 'productos.precio_unitario', 'productos.stock')
+            ->select('detalle_ventas.id', 'detalle_ventas.medida', 'detalle_ventas.cantidad', 'detalle_ventas.subtotal', 'detalle_ventas.producto_id', 'productos.nombre', 'productos.precio_unitario', 'productos.stock', 'productos.descripcion')
             ->where('detalle_ventas.venta_id', $venta->id)->get();
 
-        $tipo_comprobantes = array('Factura' => 'Factura', 'Recibo' => 'Recibo', 'Boleta' => 'Boleta');
         $clientes = $this->clientes;
         $productos = [];
 
@@ -124,6 +126,8 @@ class VentasController extends Controller
             $productos[$value->producto_id] = [
                 'id'=> $value->producto_id,
                 'nombre' => $value->nombre,
+                'descripcion' => $value->descripcion,
+                'medida' => $value->medida,
                 'cantidad' => $value->cantidad,
                 'precio' => $value->precio_unitario,
                 'stock' => $value->stock,
@@ -132,7 +136,7 @@ class VentasController extends Controller
         }
         $total = $venta->total;
 
-        return view('pages.ventas.edit', compact('venta', 'detalle', 'tipo_comprobantes', 'clientes', 'productos', 'total'));
+        return view('pages.ventas.edit', compact('venta', 'detalle', 'clientes', 'productos', 'total'));
     }
 
     /**
@@ -169,6 +173,7 @@ class VentasController extends Controller
 
                 $detalle_venta[$key] = [
                     'cantidad' => $producto['cantidad'],
+                    'medida' => $producto['medida'],
                     'subtotal' => $subtotal,
                     'producto_id' => $producto['producto_id'],
                     'venta_id' => $venta->id
@@ -184,7 +189,6 @@ class VentasController extends Controller
 
             DetalleVenta::insert($detalle_venta);
 
-            $venta->tipo_comprobante = $validated['tipo_comprobante'];
             $venta->fecha = Carbon::parse($validated['fecha'])->format('Y-m-d');
             $venta->cliente_id = $validated['cliente'];
             $venta->total = array_sum($total_productos);

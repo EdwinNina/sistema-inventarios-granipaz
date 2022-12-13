@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('detalle_compras', function (Blueprint $table) {
             $table->id();
-            $table->integer('cantidad');
+            $table->decimal('cantidad');
             $table->decimal('subtotal');
-            $table->text('detalle');
             $table->integer('historial_stock');
+            $table->string('medida', 10)->nullable();
             $table->foreignId('compra_id')->constrained();
             $table->foreignId('producto_id')->constrained();
             $table->timestamps();

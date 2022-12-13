@@ -25,10 +25,7 @@
                             <tr class="bg-white border-b hover:bg-gray-50">
                                 <th class="py-4 px-6">{{ $producto->nombre }}</th>
                                 <td class="py-4 px-6">{{ $producto->precio_unitario }}</td>
-                                <td class="py-4 px-6">
-                                    <span class="w-9 h-9 text-xs rounded-full flex justify-center items-center font-bold text-white
-                                    {{ $producto->stock > $stock_minimo ? 'bg-green-500' : 'bg-red-500' }}">{{ $producto->stock }}</span>
-                                </td>
+                                <td class="py-4 px-6 font-bold {{ $producto->stock > $stock_minimo ? 'text-green-500' : 'text-red-500' }}">{{ $producto->stock }}</td>
                                 <td class="py-4 px-6">
                                     <button type="button" class="bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 rounded-full h-10 w-10 flex justify-center items-center"
                                         wire:click="productoCarrito({{ $producto }})" title="Agregar al carrito">

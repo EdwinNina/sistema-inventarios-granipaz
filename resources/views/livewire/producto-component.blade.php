@@ -73,21 +73,23 @@
                                         title="Mostrar detalle producto">
                                             @include('components/icons/category')
                                     </button>
-                                    <button type="button"
-                                        class="bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                        wire:click="actualizarEstado({{ $producto->id }})"
-                                        title="Habilitar/Deshabilitar Producto">
-                                        @if ($producto->estado)
-                                            @include('components/icons/enable')
-                                        @else
-                                            @include('components/icons/disable')
-                                        @endif
-                                    </button>
-                                    <button type="button" title="Eliminar Producto"
-                                        class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                        wire:click="eliminarCategoria({{ $producto->id }})">
-                                        @include('components/icons/delete')
-                                    </button>
+                                    @if ($check_user_role)
+                                        <button type="button"
+                                            class="bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                            wire:click="actualizarEstado({{ $producto->id }})"
+                                            title="Habilitar/Deshabilitar Producto">
+                                            @if ($producto->estado)
+                                                @include('components/icons/enable')
+                                            @else
+                                                @include('components/icons/disable')
+                                            @endif
+                                        </button>
+                                        <button type="button" title="Eliminar Producto"
+                                            class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                            wire:click="eliminarCategoria({{ $producto->id }})">
+                                            @include('components/icons/delete')
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

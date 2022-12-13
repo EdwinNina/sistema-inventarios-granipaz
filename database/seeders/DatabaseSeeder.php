@@ -25,10 +25,12 @@ class DatabaseSeeder extends Seeder
         Storage::deleteDirectory('public/empresa');
         Storage::makeDirectory('public/empresa');
 
+        $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
+
         Categoria::factory(20)->create();
         SubCategoria::factory(40)->create();
-        Producto::factory(100)->create();
+        Producto::factory(50)->create();
         Persona::factory(60)->create();
         Empresa::factory(1)->create();
     }

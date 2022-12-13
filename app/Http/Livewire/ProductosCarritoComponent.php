@@ -26,12 +26,12 @@ class ProductosCarritoComponent extends Component
     public function AgregarProductoCarrito(Producto $producto){
 
         if(!isset($this->productos[$producto->id])){
-            $cantidad = 1;
+            $cantidad = 0;
             $this->productos[$producto->id] = array(
                 'id'=> $producto->id,
                 'nombre' => $producto->nombre,
                 'descripcion' => $producto->descripcion,
-                'stock' => ($this->tipo === 'compra') ? $producto->stock + $cantidad : $producto->stock - $cantidad,
+                'stock' => $producto->stock,
                 'cantidad' => $cantidad,
                 'medida' => $producto->medida,
                 'precio' => $producto->precio_unitario,
@@ -48,20 +48,17 @@ class ProductosCarritoComponent extends Component
         return array_sum(array_column($this->productos, 'subtotal'));
     }
 
-    public function aumentarCantidad($indice){
-        $this->productos[$indice]['cantidad']++;
-        ($this->tipo === 'compra') ? $this->productos[$indice]['stock']++ : $this->productos[$indice]['stock']--;
-        $this->productos[$indice]['subtotal'] = $this->productos[$indice]['cantidad'] * $this->productos[$indice]['precio'];
-        $this->total = $this->obtenerTotal();
-    }
-
-    public function disminuirCantidad($indice){
-        if($this->productos[$indice]['cantidad'] > 0){
-            $this->productos[$indice]['cantidad']--;
-            ($this->tipo === 'compra') ? $this->productos[$indice]['stock']-- : $this->productos[$indice]['stock']++;
-            $this->productos[$indice]['subtotal'] = $this->productos[$indice]['cantidad'] * $this->productos[$indice]['precio'];
-            $this->total = $this->obtenerTotal();
+    public function aumentarCantidadManual($indice, $cantidad){
+        if($cantidad == 0){
+            $this->emit('existe', 'No puedes vender el producto con cantidad cero');
+            return;
         }
+        if($this->tipo === 'VENTA' && $cantidad > $this->productos[$indice]['stock']){
+            $this->emit('existe', 'No puedes vender mas que el stock actual');
+            return;
+        }
+        $this->productos[$indice]['subtotal'] = $cantidad * $this->productos[$indice]['precio'];
+        $this->total = $this->obtenerTotal();
     }
 
     public function quitarProducto($id){

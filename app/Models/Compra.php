@@ -9,5 +9,5 @@ class Compra extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['codigo','tipo_comprobante', 'nro_comprobante', 'cantidad', 'total', 'fecha', 'proveedor_id'];
+    protected $fillable = ['codigo','tipo_comprobante', 'nro_comprobante', 'cantidad', 'total', 'fecha', 'proveedor_id', 'user_id'];
 }

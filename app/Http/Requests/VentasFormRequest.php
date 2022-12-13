@@ -24,7 +24,6 @@ class VentasFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'tipo_comprobante' => 'required',
             'cliente' => 'required',
             'fecha' => 'required',
             'productos' => 'required|array',

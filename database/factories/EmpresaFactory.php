@@ -17,15 +17,15 @@ class EmpresaFactory extends Factory
     public function definition()
     {
         return [
-            'empresa' => 'Soalpro Lacteos Lta',
-            'direccion' => 'Av. Jaime Mendonza Quinto Anillo #123',
-            'nit' => '4567894',
-            'correo' => 'soalpro@lacteos.com',
-            'celular' => '60614488',
-            'paterno' => 'Marca',
-            'materno' => 'Luta',
-            'nombre' => 'Jaime',
-            'logotipo' => 'productos/' . $this->faker->image('public/storage/empresa', 500, 500, null, false),
+            'empresa' => 'Granipaz',
+            'direccion' => 'Barrio Los Milagros Av. Cuarto Anillo',
+            'nit' => '123456',
+            'correo' => 'granipaz@gmail.com',
+            'celular' => '60566656',
+            'paterno' => 'Carvajal',
+            'materno' => 'Machicado',
+            'nombre' => 'Grover Rene',
+            'logotipo' => 'empresa/' . $this->faker->image('public/storage/empresa', 500, 500, null, false),
             'stock_minimo' => 10,
         ];
     }

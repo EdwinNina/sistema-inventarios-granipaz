@@ -16,14 +16,20 @@ class ReporteComprasVentasComponent extends Component
         $this->tipo = $tipo;
         $this->sin_resultado = false;
 
-        $tabla = $tipo === 'VENTA' ? 'detalle_ventas' : 'detalle_compras';
-        $precio = $tipo === 'VENTA' ? 'precio_venta' : 'precio_compra';
-
-        $this->datos = DB::table("$tabla")
-            ->join('productos', 'productos.id', '=', "$tabla.producto_id")
-            ->selectRaw("productos.nombre, SUM($tabla.cantidad) cantidad, productos.$precio precio, SUM($tabla.cantidad * productos.$precio) total")
-            ->groupByRaw("productos.id, productos.nombre, productos.$precio")
-            ->get();
+        if($tipo === 'VENTA'){
+            $query = DB::table("detalle_ventas")
+                ->join('productos', 'productos.id', '=', "detalle_ventas.producto_id")
+                ->join('ventas', 'ventas.id', '=', 'detalle_ventas.venta_id')
+               ->selectRaw("ventas.fecha, productos.nombre, SUM(detalle_ventas.cantidad) cantidad, productos.precio_unitario precio, SUM(detalle_ventas.cantidad * productos.precio_unitario) total, productos.descripcion, detalle_ventas.medida")
+               ->groupByRaw("ventas.fecha, productos.id, productos.nombre, productos.precio_unitario, productos.descripcion, detalle_ventas.medida");
+        }else{
+            $query = DB::table("detalle_compras")
+                ->join('productos', 'productos.id', '=', "detalle_compras.producto_id")
+                ->join('compras', 'compras.id', '=', 'detalle_compras.compra_id')
+               ->selectRaw("compras.fecha, productos.nombre, SUM(detalle_compras.cantidad) cantidad, productos.precio_unitario precio, SUM(detalle_compras.cantidad * productos.precio_unitario) total, productos.descripcion")
+               ->groupByRaw("compras.fecha, productos.id, productos.nombre, productos.precio_unitario, productos.descripcion");
+        }
+        $this->datos = $query->get();
     }
 
     public function render()
@@ -34,16 +40,24 @@ class ReporteComprasVentasComponent extends Component
     public function listarVentasPorFecha(){
         if($this->fecha_ini == "" && $this->fecha_fin == "") return;
 
-        $tabla = $this->tipo === 'VENTA' ? 'detalle_ventas' : 'detalle_compras';
-        $precio = $this->tipo === 'VENTA' ? 'precio_venta' : 'precio_compra';
+        if($this->tipo === 'VENTA'){
+            $query = DB::table("detalle_ventas")
+                ->join('productos', 'productos.id', '=', "detalle_ventas.producto_id")
+                ->join('ventas', 'ventas.id', '=', 'detalle_ventas.venta_id')
+               ->selectRaw("ventas.fecha, productos.nombre, SUM(detalle_ventas.cantidad) cantidad, productos.precio_unitario precio, SUM(detalle_ventas.cantidad * productos.precio_unitario) total, productos.descripcion, detalle_ventas.medida")
+               ->groupByRaw("ventas.fecha, productos.id, productos.nombre, productos.precio_unitario, productos.descripcion, detalle_ventas.medida")
+               ->whereBetween('ventas.fecha', [$this->fecha_ini, $this->fecha_fin]);
+        }else{
+            $query = DB::table("detalle_compras")
+                ->join('productos', 'productos.id', '=', "detalle_compras.producto_id")
+                ->join('compras', 'compras.id', '=', 'detalle_compras.compra_id')
+               ->selectRaw("compras.fecha, productos.nombre, SUM(detalle_compras.cantidad) cantidad, productos.precio_unitario precio, SUM(detalle_compras.cantidad * productos.precio_unitario) total, productos.descripcion")
+               ->groupByRaw("compras.fecha, productos.id, productos.nombre, productos.precio_unitario, productos.descripcion")
+               ->whereBetween('compras.fecha', [$this->fecha_ini, $this->fecha_fin]);
+        }
 
-        $this->datos = DB::table("$tabla")
-            ->join('productos', 'productos.id', '=', "$tabla.producto_id")
-            ->join('ventas', 'ventas.id', '=', "$tabla.venta_id")
-            ->selectRaw("productos.nombre, SUM($tabla.cantidad) cantidad, productos.$precio precio, SUM($tabla.cantidad * productos.$precio) total")
-            ->groupByRaw("productos.id, productos.nombre, productos.$precio")
-            ->whereBetween('ventas.fecha', [$this->fecha_ini, $this->fecha_fin])
-            ->get();
+        $this->datos = $query->get();
+
         if(empty($this->ventas)) return $this->sin_resultado = true;
     }
 }

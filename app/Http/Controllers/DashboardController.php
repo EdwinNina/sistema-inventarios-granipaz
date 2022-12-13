@@ -14,7 +14,12 @@ use Exception;
     {
         public function index()
         {
-            $cantidad_productos = DB::table('productos')->count();
+
+    //         $targetFolder = storage_path('app/public');
+    //   $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+    //   symlink($targetFolder, $linkFolder);
+
+      $cantidad_productos = DB::table('productos')->count();
 
             $compras_realizadas = DB::table('compras')->count();
 

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('detalle_ventas', function (Blueprint $table) {
             $table->id();
-            $table->integer('cantidad');
+            $table->decimal('cantidad');
             $table->decimal('subtotal');
             $table->string('medida', 10)->nullable();
             $table->integer('historial_stock');

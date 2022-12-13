@@ -23,29 +23,11 @@
                             <td class="py-4 px-6 font-semibold text-gray-900 text-xs">{{ $producto['nombre'] }}</td>
                             <td class="py-4 px-6 text-xs">{{ $producto['descripcion'] }}</td>
                             <td class="py-4 px-6">
-                                <div class="flex items-center justify-start space-x-3">
-                                    <button
-                                        class="inline-flex items-center p-1 text-sm font-medium text-gray-500 bg-white rounded-full border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                                        type="button" wire:click="disminuirCantidad({{ $producto['id'] }})">
-                                        <span class="sr-only">Quantity button</span>
-                                        <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                    <div>
-                                        <input type="text"
-                                            class="bg-gray-50 w-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1"
-                                            value="{{ $producto['cantidad'] }}" name="productos[{{ $producto['id'] }}][cantidad]" wire:keydown.enter.prevent="aumentarCantidadManual({{ $producto['id'] }}, $event.target.value)">
-                                    </div>
-                                    <button
-                                        class="inline-flex items-center p-1 text-sm font-medium text-gray-500 bg-white rounded-full border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                                        type="button" wire:click="aumentarCantidad({{ $producto['id'] }})">
-                                        <span class="sr-only">Quantity button</span>
-                                        <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    </button>
-                                </div>
+                                <input type="text" class="input input-bordered w-full"
+                                    value="{{ $producto['cantidad'] }}" name="productos[{{ $producto['id'] }}][cantidad]"
+                                    wire:keydown.enter.prevent="aumentarCantidadManual({{ $producto['id'] }}, $event.target.value)"
+                                    wire:keydown.debounce.150ms="aumentarCantidadManual({{ $producto['id'] }}, $event.target.value)"
+                                >
                             </td>
                             <td class="py-4 px-6 font-semibold text-gray-900">{{ $producto['stock'] }}</td>
                             <td class="py-4 px-6 font-semibold text-gray-900">
@@ -65,7 +47,7 @@
                 </tbody>
                 <tfoot>
                     <tr class="font-semibold text-gray-900">
-                        <th scope="row" class="py-3 px-6 text-base" colspan="4">Total</th>
+                        <th scope="row" class="py-3 px-6 text-base" colspan="6">Total</th>
                         <td class="py-3 px-6">{{ $total }} Bs</td>
                     </tr>
                 </tfoot>

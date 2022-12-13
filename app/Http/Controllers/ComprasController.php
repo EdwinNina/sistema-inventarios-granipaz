@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ComprasFormRequest;
 use App\Models\Persona;
 use App\Models\Producto;
+use Illuminate\Support\Facades\Auth;
 
 class ComprasController extends Controller
 {
     public $proveedores = '';
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->proveedores = Persona::where('estado', 1)->where('tipo_persona', 'PROVEEDOR')->select('id', 'empresa')->get();
     }
     /**
@@ -36,6 +38,7 @@ class ComprasController extends Controller
     public function create()
     {
         $proveedores = $this->proveedores;
+
         return view('pages.compras.create', compact('proveedores'));
     }
 
@@ -57,19 +60,18 @@ class ComprasController extends Controller
             $detalle_compra = [];
 
             $compra = Compra::create([
-                'tipo_comprobante' => $validated['tipo_comprobante'],
-                'nro_comprobante' => $validated['nro_comprobante'],
                 'fecha' => Carbon::parse($validated['fecha'])->format('Y-m-d'),
-                'proveedor_id' => $validated['proveedor']
+                'proveedor_id' => $validated['proveedor'],
+                'user_id' => Auth::id()
             ]);
 
             foreach ($productos as $key => $producto) {
                 $subtotal = $producto['cantidad'] * $producto['precio'];
 
                 $detalle_compra[$key] = [
+                    'medida' => $producto['medida'],
                     'cantidad' => $producto['cantidad'],
                     'subtotal' => $subtotal,
-                    'historial_stock' => $producto['cantidad'],
                     'producto_id' => $producto['producto_id'],
                     'compra_id' => $compra->id
                 ];
@@ -87,15 +89,17 @@ class ComprasController extends Controller
 
             Compra::where('id', $compra->id)->update([
                 'codigo' => str_pad("COMPRA-". date('m-Y'). "-" . $compra->id, 10, "0", STR_PAD_LEFT),
+                'nro_comprobante' => str_pad($compra->id, 10, "0", STR_PAD_LEFT),
                 'total' => array_sum($total_productos),
                 'cantidad' => array_sum($cantidad_productos),
             ]);
 
             DB::commit();
-            return redirect()->route('compras.index')->with('message','good');
+            return redirect()->route('compras.index')->with('message', 'good');
         } catch (Exception $ex) {
+            dd($ex);
             DB::rollback();
-            return redirect()->route('compras.create')->with('message','error');
+            return redirect()->route('compras.create')->with('message', 'error');
         }
     }
 
@@ -109,10 +113,9 @@ class ComprasController extends Controller
     {
         $detalle = DB::table('detalle_compras')
             ->join('productos', 'productos.id', '=', 'detalle_compras.producto_id')
-            ->select('detalle_compras.id', 'detalle_compras.cantidad', 'detalle_compras.subtotal', 'detalle_compras.producto_id', 'productos.nombre', 'productos.precio_compra')
+            ->select('detalle_compras.id', 'detalle_compras.cantidad', 'detalle_compras.subtotal', 'detalle_compras.producto_id', 'productos.nombre', 'productos.precio_unitario', 'productos.descripcion', 'detalle_compras.medida', 'productos.stock')
             ->where('detalle_compras.compra_id', $compra->id)->get();
 
-        $tipo_comprobantes = array('Factura' => 'Factura', 'Recibo' => 'Recibo', 'Boleta' => 'Boleta');
         $proveedores = $this->proveedores;
         $productos = [];
 
@@ -120,14 +123,17 @@ class ComprasController extends Controller
             $productos[$value->producto_id] = [
                 'id'=> $value->producto_id,
                 'nombre' => $value->nombre,
+                'descripcion' => $value->descripcion,
                 'cantidad' => $value->cantidad,
-                'precio_compra' => $value->precio_compra,
+                'precio' => $value->precio_unitario,
+                'medida' => $value->medida,
+                'stock' => $value->stock,
                 'subtotal' => $value->subtotal
             ];
         }
         $total = $compra->total;
 
-        return view('pages.compras.edit', compact('compra', 'detalle', 'tipo_comprobantes', 'proveedores', 'productos', 'total'));
+        return view('pages.compras.edit', compact('compra', 'detalle', 'proveedores', 'productos', 'total'));
     }
 
     /**
@@ -179,8 +185,6 @@ class ComprasController extends Controller
 
             DetalleCompra::insert($detalle_compra);
 
-            $compra->tipo_comprobante = $validated['tipo_comprobante'];
-            $compra->nro_comprobante = $validated['nro_comprobante'];
             $compra->fecha = Carbon::parse($validated['fecha'])->format('Y-m-d');
             $compra->proveedor_id = $validated['proveedor'];
             $compra->total = array_sum($total_productos);
@@ -190,6 +194,7 @@ class ComprasController extends Controller
             DB::commit();
             return redirect()->route('compras.index')->with('message','good');
         } catch (Exception $ex) {
+            dd($ex);
             DB::rollback();
             return redirect()->route('compras.edit')->with('message','error');
         }

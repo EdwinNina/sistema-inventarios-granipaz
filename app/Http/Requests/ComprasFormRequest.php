@@ -24,8 +24,6 @@ class ComprasFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'tipo_comprobante' => 'required',
-            'nro_comprobante' => 'required',
             'proveedor' => 'required',
             'fecha' => 'required',
             'productos' => 'required|array',

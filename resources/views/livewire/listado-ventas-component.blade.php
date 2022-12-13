@@ -60,18 +60,20 @@
                                             @include('components/icons/print')
                                         </button>
                                     </form>
-                                    @if ($venta->estado)
-                                        <button type="button" title="Anular la Venta"
-                                            class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                            wire:click="cambiarEstadoVenta({{ $venta->id }}, 'anularVenta')">
-                                            @include('components/icons/cancel')
-                                        </button>
-                                    @else
-                                        <button type="button" title="Habilitar Venta"
-                                            class="bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
-                                            wire:click="cambiarEstadoVenta({{ $venta->id }}, 'habilitarVenta')">
-                                            @include('components/icons/enable-purchase')
-                                        </button>
+                                    @if ($check_user_role)
+                                        @if ($venta->estado)
+                                            <button type="button" title="Anular la Venta"
+                                                class="bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                                wire:click="cambiarEstadoVenta({{ $venta->id }}, 'anularVenta')">
+                                                @include('components/icons/cancel')
+                                            </button>
+                                        @else
+                                            <button type="button" title="Habilitar Venta"
+                                                class="bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none rounded-full h-10 w-10 flex justify-center items-center"
+                                                wire:click="cambiarEstadoVenta({{ $venta->id }}, 'habilitarVenta')">
+                                                @include('components/icons/enable-purchase')
+                                            </button>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
