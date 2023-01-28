@@ -58,13 +58,6 @@ class ProveedorComponent extends Component
     public function rules(){
         return [
             'nombre' => 'required',
-            'paterno' => 'required',
-            'materno' => 'required',
-            'nro_documento' => ['required', Rule::unique('personas','nro_documento')->ignore($this->persona_id)],
-            'tipo_documento' => 'required',
-            'empresa' => 'required',
-            'email' => 'required',
-            'celular' => 'required',
         ];
     }
 

@@ -20,7 +20,7 @@
                 <select id="proveedores" class="select select-bordered w-full" wire:model="proveedor">
                     <option value="" selected>Seleccionar proveedor</option>
                     @foreach ($proveedores as $proveedor)
-                        <option value="{{ $proveedor->id }}">{{ $proveedor->empresa }}</option>
+                        <option value="{{ $proveedor->id }}">{{ Str::title($proveedor->nombre) }}</option>
                     @endforeach
                 </select>
             </div>

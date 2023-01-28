@@ -22,7 +22,7 @@ class ComprasProveedorComponent extends Component
 
     public function render()
     {
-        $proveedores = Persona::where('estado', 1)->where('tipo_persona', 'PROVEEDOR')->select('id', 'empresa')->get();
+        $proveedores = Persona::where('estado', 1)->where('tipo_persona', 'PROVEEDOR')->select('id', 'nombre')->get();
 
         return view('livewire.compras-proveedor-component', compact('proveedores'));
     }

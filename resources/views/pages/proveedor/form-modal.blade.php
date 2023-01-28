@@ -5,14 +5,12 @@
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Paterno</span></label>
                 <input type="text" placeholder="Ingrese el Apellido Paterno"
-                    class="input input-bordered w-full @error('paterno') input-error @enderror" wire:model.defer="paterno" />
-                @error('paterno') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    class="input input-bordered w-full" wire:model.defer="paterno" />
             </div>
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Materno</span></label>
                 <input type="text" placeholder="Ingrese el Apellido Materno"
-                    class="input input-bordered w-full @error('materno') input-error @enderror" wire:model.defer="materno" />
-                @error('nombre') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    class="input input-bordered w-full" wire:model.defer="materno" />
             </div>
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Nombre</span></label>
@@ -24,20 +22,18 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Tipo de Documento</span></label>
-                <select class="select select-bordered @error('tipo_documento') select-error @enderror" wire:model.defer="tipo_documento">
+                <select class="select select-bordered" wire:model.defer="tipo_documento">
                     <option selected>Seleccione el Tipo de Documento</option>
                     <option value="NIT">NIT</option>
                     <option value="CI">CI</option>
                     <option value="PASAPORTE">PASAPORTE</option>
                     <option value="RUA">RUA</option>
                 </select>
-                @error('tipo_documento') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Nro de Documento</span></label>
                 <input type="number" placeholder="Ingrese el nro de documento"
-                    class="input input-bordered w-full @error('nro_documento') input-error @enderror" wire:model.defer="nro_documento"/>
-                @error('nro_documento') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    class="input input-bordered w-full" wire:model.defer="nro_documento"/>
             </div>
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Complemento</span></label>
@@ -48,21 +44,18 @@
         <div class="form-control w-full">
             <label class="label"><span class="label-text">Razon Social</span></label>
             <input type="text" placeholder="Ingrese el nombre de la empresa"
-                class="input input-bordered w-full @error('empresa') input-error @enderror" wire:model.defer="empresa" />
-            @error('empresa') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                class="input input-bordered w-full" wire:model.defer="empresa" />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Correo electronico</span></label>
                 <input type="email" placeholder="Ingrese el correo electronico"
-                    class="input input-bordered w-full @error('email') input-error @enderror" wire:model.defer="email" />
-                @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    class="input input-bordered w-full" wire:model.defer="email" />
             </div>
             <div class="form-control w-full">
                 <label class="label"><span class="label-text">Celular</span></label>
                 <input type="number" placeholder="Ingrese el numero de celular"
-                    class="input input-bordered w-full @error('celular') input-error @enderror" wire:model.defer="celular" />
-                @error('celular') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    class="input input-bordered w-full" wire:model.defer="celular" />
             </div>
         </div>
     </x-slot>

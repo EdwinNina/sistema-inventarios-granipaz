@@ -16,14 +16,14 @@ return new class extends Migration
         Schema::create('personas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 50);
-            $table->string('paterno', 50);
+            $table->string('paterno', 50)->nullable();
             $table->string('materno', 50)->nullable();
-            $table->enum('tipo_documento', ['NIT', 'CI', 'PASAPORTE', 'RUA']);
-            $table->string('nro_documento', 15)->unique();
+            $table->enum('tipo_documento', ['NIT', 'CI', 'PASAPORTE', 'RUA'])->nullable();
+            $table->string('nro_documento', 15)->unique()->nullable();
             $table->string('complemento', 10)->nullable();
-            $table->string('empresa', 150);
-            $table->string('email', 60);
-            $table->string('celular', 8);
+            $table->string('empresa', 150)->nullable();
+            $table->string('email', 60)->nullable();
+            $table->string('celular', 8)->nullable();
             $table->enum('tipo_persona', ['CLIENTE', 'PROVEEDOR']);
             $table->boolean('estado')->default(true);
             $table->timestamps();
