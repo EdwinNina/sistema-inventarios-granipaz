@@ -54,7 +54,6 @@
                         <section class="p-6 w-96 bg-white rounded-lg border border-gray-200 shadow-md">
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $producto_seleccionado['nombre']}}</h5>
                             <p class="mb-3 font-normal text-gray-700">Detalle: {{ $producto_seleccionado['descripcion'] }}</p>
-                            <p class="mb-3 font-normal text-gray-700">Precio U.: {{ $producto_seleccionado['precio_unitario'] }}</p>
                             <p class="mb-3 font-normal text-gray-700">SubCategoria: {{ $producto_seleccionado['subcategoria']['nombre'] }}</p>
                             <p class="mb-3 font-normal text-gray-700">Stock Actual:
                                 <span class=" text-sm font-bold p-2 {{ $producto_seleccionado['stock'] > $stock_minimo ? 'text-green-500' : 'text-red-500' }}">{{ $producto_seleccionado['stock'] }}</span>
@@ -131,10 +130,10 @@
                                             <td class="py-4 px-3">{{ $kardex->fecha }}</td>
                                             <td class="py-4">{{ $kardex->detalle }}</td>
                                             <td class="py-4 text-center bg-blue-200">{{ $kardex->cantidad_ingreso }}</td>
-                                            <td class="py-4 text-center bg-blue-200">{{ $kardex->precio_unitario }}</td>
+                                            <td class="py-4 text-center bg-blue-200">{{ $kardex->precio_compra }}</td>
                                             <td class="py-4 text-center bg-blue-200">{{ $kardex->subtotal_ingreso }}</td>
                                             <td class="py-4 text-center bg-orange-200">{{ $kardex->cantidad_salida }}</td>
-                                            <td class="py-4 text-center bg-orange-200">{{ $kardex->precio_unitario }}</td>
+                                            <td class="py-4 text-center bg-orange-200">{{ $kardex->precio_venta }}</td>
                                             <td class="py-4 text-center bg-orange-200">{{ $kardex->subtotal_salida }}</td>
                                             <td class="py-4 text-center bg-green-200">{{ $kardex->stock }}</td>
                                         </tr>

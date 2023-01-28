@@ -10,12 +10,10 @@
                     <img src="{{ Storage::url($detalle['imagen']) }}" alt="{{ $detalle->nombre }}" class="object-cover w-full rounded-lg">
                 </div>
                 <div class="col-span-2">
-                    <p class="font-bold text-lg">Nombre: {{ $detalle['nombre'] }} </p>
-                    <p class="font-bold">descripcion: {{ $detalle['descripcion'] }} </p>
-                    <p class="font-bold">Precio Unitario: {{ $detalle['precio_unitario'] }} </p>
-                    <p class="font-bold">Precio Venta: {{ $detalle['precio_venta'] }} </p>
-                    <p class="font-bold">Stock: {{ $detalle['stock'] }} </p>
-                    <p class="font-bold">SubCategoria: {{ $detalle['subcategoria']['nombre'] }} </p>
+                    <p><span class="font-bold text-lg">Nombre:</span> {{ $detalle['nombre'] }} </p>
+                    <p><span class="font-bold">Descripcion:</span> {{ $detalle['descripcion'] }} </p>
+                    <p><span class="font-bold">Stock:</span> {{ $detalle['stock'] }} </p>
+                    <p><span class="font-bold">SubCategoria:</span> {{ $detalle['subcategoria']['nombre'] }} </p>
                 </div>
             </div>
         @endif

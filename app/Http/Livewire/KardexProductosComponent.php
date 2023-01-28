@@ -81,14 +81,14 @@ class KardexProductosComponent extends Component
                 ->join('compras', 'compras.id', '=', 'detalle_compras.compra_id')
                 ->where('detalle_compras.producto_id', $this->producto_seleccionado['id'])
                 ->where('compras.estado', 1)
-                ->selectRaw('compras.tipo, compras.fecha, detalle_compras.cantidad, detalle_compras.subtotal, 0, 0, detalle_compras.historial_stock, productos.precio_unitario, compras.created_at');
+                ->selectRaw('compras.tipo, compras.fecha, detalle_compras.cantidad, detalle_compras.subtotal, 0, 0, detalle_compras.historial_stock, detalle_compras.precio_compra, 0, compras.created_at');
 
             $this->detalle_kardex = DB::table('detalle_ventas')
                 ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
                 ->join('ventas', 'ventas.id', '=', 'detalle_ventas.venta_id')
                 ->where('detalle_ventas.producto_id', $this->producto_seleccionado['id'])
                 ->where('ventas.estado', 1)
-                ->selectRaw('ventas.tipo as detalle, ventas.fecha as fecha, 0 cantidad_ingreso, 0 subtotal_ingreso, detalle_ventas.cantidad cantidad_salida, detalle_ventas.subtotal subtotal_salida, detalle_ventas.historial_stock stock, productos.precio_unitario, ventas.created_at as fecha_hora')
+                ->selectRaw('ventas.tipo as detalle, ventas.fecha as fecha, 0 cantidad_ingreso, 0 subtotal_ingreso, detalle_ventas.cantidad cantidad_salida, detalle_ventas.subtotal subtotal_salida, detalle_ventas.historial_stock stock, 0 as precio_compra, detalle_ventas.precio_venta as precio_venta, ventas.created_at as fecha_hora')
                 ->unionAll($detalle_compra)
                 ->orderByRaw('fecha, fecha_hora')
                 ->get();
@@ -105,7 +105,7 @@ class KardexProductosComponent extends Component
             ->where('detalle_compras.producto_id', $this->producto_seleccionado['id'])
             ->where('compras.estado', 1)
             ->whereBetween('compras.fecha', [$this->fecha_ini, $this->fecha_fin ])
-            ->selectRaw('compras.tipo, compras.fecha, detalle_compras.cantidad, detalle_compras.subtotal, 0, 0, detalle_compras.historial_stock, productos.precio_unitario');
+            ->selectRaw('compras.tipo, compras.fecha, detalle_compras.cantidad, detalle_compras.subtotal, 0, 0, detalle_compras.historial_stock, detalle_compras.precio_compra, 0');
 
         $this->detalle_kardex = DB::table('detalle_ventas')
             ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
@@ -113,7 +113,7 @@ class KardexProductosComponent extends Component
             ->where('detalle_ventas.producto_id', $this->producto_seleccionado['id'])
             ->where('ventas.estado', 1)
             ->whereBetween('ventas.fecha', [$this->fecha_ini, $this->fecha_fin ])
-            ->selectRaw('ventas.tipo as detalle, ventas.fecha as fecha, 0 cantidad_ingreso, 0 subtotal_ingreso, detalle_ventas.cantidad cantidad_salida, detalle_ventas.subtotal subtotal_salida, detalle_ventas.historial_stock stock, productos.precio_unitario')
+            ->selectRaw('ventas.tipo as detalle, ventas.fecha as fecha, 0 cantidad_ingreso, 0 subtotal_ingreso, detalle_ventas.cantidad cantidad_salida, detalle_ventas.subtotal subtotal_salida, detalle_ventas.historial_stock stock, 0 as precio_compra, detalle_ventas.precio_venta as precio_venta')
             ->unionAll($detalle_compra)
             ->orderBy('fecha')
             ->get();

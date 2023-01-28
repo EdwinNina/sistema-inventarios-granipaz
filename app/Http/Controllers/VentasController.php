@@ -74,6 +74,7 @@ class VentasController extends Controller
                 $detalle_venta[$key] = [
                     'medida' => $producto['medida'],
                     'cantidad' => $producto['cantidad'],
+                    'precio_venta' => $producto['precio'],
                     'subtotal' => $subtotal,
                     'producto_id' => $producto['producto_id'],
                     'venta_id' => $venta->id
@@ -116,7 +117,7 @@ class VentasController extends Controller
     {
         $detalle = DB::table('detalle_ventas')
             ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
-            ->select('detalle_ventas.id', 'detalle_ventas.medida', 'detalle_ventas.cantidad', 'detalle_ventas.subtotal', 'detalle_ventas.producto_id', 'productos.nombre', 'productos.precio_unitario', 'productos.stock', 'productos.descripcion')
+            ->select('detalle_ventas.id', 'detalle_ventas.medida', 'detalle_ventas.cantidad', 'detalle_ventas.subtotal', 'detalle_ventas.producto_id', 'productos.nombre', 'detalle_ventas.precio_venta', 'productos.stock', 'productos.descripcion')
             ->where('detalle_ventas.venta_id', $venta->id)->get();
 
         $clientes = $this->clientes;
@@ -129,7 +130,7 @@ class VentasController extends Controller
                 'descripcion' => $value->descripcion,
                 'medida' => $value->medida,
                 'cantidad' => $value->cantidad,
-                'precio' => $value->precio_unitario,
+                'precio' => $value->precio_venta,
                 'stock' => $value->stock,
                 'subtotal' => $value->subtotal
             ];

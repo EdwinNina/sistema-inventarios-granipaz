@@ -30,7 +30,7 @@ class ListadoComprasComponent extends Component
         $this->productos = DB::table('detalle_compras')
             ->join('productos', 'productos.id', '=', 'detalle_compras.producto_id')
             ->where('detalle_compras.compra_id', '=', $compra_id)
-            ->select('productos.nombre', 'productos.precio_unitario', 'productos.descripcion' ,'detalle_compras.cantidad', 'detalle_compras.subtotal')
+            ->select('productos.nombre', 'detalle_compras.precio_compra', 'productos.descripcion' ,'detalle_compras.cantidad', 'detalle_compras.subtotal')
             ->get();
 
         $this->modalToggle = true;
