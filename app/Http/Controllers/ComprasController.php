@@ -73,7 +73,8 @@ class ComprasController extends Controller
                     'cantidad' => $producto['cantidad'],
                     'subtotal' => $subtotal,
                     'producto_id' => $producto['producto_id'],
-                    'compra_id' => $compra->id
+                    'compra_id' => $compra->id,
+                    'precio_compra' => $producto['precio']
                 ];
                 $total_productos[] = $subtotal;
                 $cantidad_productos[] = $productos[$key]['cantidad'];
@@ -113,7 +114,7 @@ class ComprasController extends Controller
     {
         $detalle = DB::table('detalle_compras')
             ->join('productos', 'productos.id', '=', 'detalle_compras.producto_id')
-            ->select('detalle_compras.id', 'detalle_compras.cantidad', 'detalle_compras.subtotal', 'detalle_compras.producto_id', 'productos.nombre', 'productos.precio_unitario', 'productos.descripcion', 'detalle_compras.medida', 'productos.stock')
+            ->select('detalle_compras.id', 'detalle_compras.cantidad', 'detalle_compras.subtotal', 'detalle_compras.producto_id', 'productos.nombre', 'detalle_compras.precio_compra', 'productos.descripcion', 'detalle_compras.medida', 'productos.stock')
             ->where('detalle_compras.compra_id', $compra->id)->get();
 
         $proveedores = $this->proveedores;
@@ -125,7 +126,7 @@ class ComprasController extends Controller
                 'nombre' => $value->nombre,
                 'descripcion' => $value->descripcion,
                 'cantidad' => $value->cantidad,
-                'precio' => $value->precio_unitario,
+                'precio' => $value->precio_compra,
                 'medida' => $value->medida,
                 'stock' => $value->stock,
                 'subtotal' => $value->subtotal

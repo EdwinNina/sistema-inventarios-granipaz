@@ -8,10 +8,10 @@
                     <tr>
                         <th scope="col" class="py-3 px-6">Nombre</th>
                         <th scope="col" class="py-3 px-6">Detalle</th>
-                        <th scope="col" class="py-3 px-6 text-center">Cantidad Mts</th>
                         <th scope="col" class="py-3 px-6">Stock</th>
+                        <th scope="col" class="py-3 px-6">Precio</th>
+                        <th scope="col" class="py-3 px-6 text-center">Cantidad Mts</th>
                         <th scope="col" class="py-3 px-6">Medida</th>
-                        <th scope="col" class="py-3 px-6">Precio Uni</th>
                         <th scope="col" class="py-3 px-6">Subtotal</th>
                         <th scope="col" class="py-3 px-6">Accion</th>
                     </tr>
@@ -22,19 +22,25 @@
                             <input type="hidden" name="productos[{{ $producto['id'] }}][producto_id]" value="{{ $producto['id'] }}">
                             <td class="py-4 px-6 font-semibold text-gray-900 text-xs">{{ $producto['nombre'] }}</td>
                             <td class="py-4 px-6 text-xs">{{ $producto['descripcion'] }}</td>
+                            <td class="py-4 px-6 font-semibold text-gray-900">{{ $producto['stock'] }}</td>
+                            <td class="py-4 px-6 font-semibold text-gray-900">
+                                <input type="number" step="any" class="input input-bordered w-full"
+                                    name="productos[{{ $producto['id'] }}][precio]"
+                                    wire:keydown.debounce.250ms="cambiarPrecioProducto({{ $producto['id'] }}, $event.target.value)"
+                                    value="{{ $producto['precio'] }}"
+                                />
+                            </td>
                             <td class="py-4 px-6">
                                 <input type="text" class="input input-bordered w-full"
                                     value="{{ $producto['cantidad'] }}" name="productos[{{ $producto['id'] }}][cantidad]"
-                                    wire:keydown.enter.prevent="aumentarCantidadManual({{ $producto['id'] }}, $event.target.value)"
-                                    wire:keydown.debounce.150ms="aumentarCantidadManual({{ $producto['id'] }}, $event.target.value)"
+                                    wire:keydown.debounce.250ms="aumentarCantidadManual({{ $producto['id'] }}, $event.target.value)"
                                 >
                             </td>
-                            <td class="py-4 px-6 font-semibold text-gray-900">{{ $producto['stock'] }}</td>
                             <td class="py-4 px-6 font-semibold text-gray-900">
-                                <input type="text" class="input input-bordered w-full" name="productos[{{ $producto['id'] }}][medida]" value="{{ $producto['medida'] }}">
-                            </td>
-                            <td class="py-4 px-6 font-semibold text-gray-900">{{ $producto['precio'] }}
-                                <input type="hidden" name="productos[{{ $producto['id'] }}][precio]" value="{{ $producto['precio'] }}">
+                                <input type="text" class="input input-bordered w-full"
+                                    name="productos[{{ $producto['id'] }}][medida]"
+                                    value="{{ $producto['medida'] }}"
+                                >
                             </td>
                             <td class="py-4 px-6 font-semibold text-gray-900">{{ $producto['subtotal'] }}</td>
                             <td class="py-4 px-6">

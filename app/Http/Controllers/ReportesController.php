@@ -46,15 +46,14 @@ class ReportesController extends Controller
         $this->fpdf->SetFont('Arial','B', 10);
         $this->fpdf->SetFillColor(232,232,232);
         $this->fpdf->Cell(60,8,'Nombre',1,0,'C',true);
-        $this->fpdf->Cell(50,8,'Descripcion',1,0,'C',true);
-        $this->fpdf->Cell(10,8,'P.U.',1,0,'C',true);
+        $this->fpdf->Cell(70,8,'Descripcion',1,0,'C',true);
         $this->fpdf->Cell(14,8,'Stock',1,0,'C',true);
         $this->fpdf->Cell(33,8,'Categoria',1,0,'C',true);
-        $this->fpdf->Cell(15,8,'Est',1,0,'C',true);
+        $this->fpdf->Cell(15,8,'Estado',1,0,'C',true);
         $this->fpdf->Ln();
         $this->fpdf->SetFont('Arial','',6);
         foreach ($productos as $producto) {
-            $cellWidth=50;//wrapped cell width
+            $cellWidth=70;//wrapped cell width
             $cellHeight=8;//normal one-line cell height
 
             //check whether the text is overflowing
@@ -94,7 +93,6 @@ class ReportesController extends Controller
             $this->fpdf->MultiCell($cellWidth,$cellHeight, utf8_decode($producto->descripcion),1);
             $this->fpdf->SetXY($xPos + $cellWidth , $yPos);
 
-            $this->fpdf->Cell(10,($line * $cellHeight), $producto->precio_unitario,1,0,'C');
             $this->fpdf->Cell(14,($line * $cellHeight), $producto->stock,1,0,'C');
             $this->fpdf->Cell(33,($line * $cellHeight), $producto->subcategoria->nombre,1,0);
             $this->fpdf->Cell(15,($line * $cellHeight), $producto->estado ? 'Activo' : 'Inactivo' ,1,0,'C');
@@ -120,7 +118,7 @@ class ReportesController extends Controller
 
         if(!empty($fecha_ini) && !empty($fecha_fin)){ $query->whereBetween('compras.fecha', [$fecha_ini, $fecha_fin]); }
 
-        $compras = $query->select('compras.codigo','compras.fecha', 'productos.nombre' ,'detalle_compras.cantidad', 'productos.precio_unitario', 'detalle_compras.subtotal')->get();
+        $compras = $query->select('compras.codigo','compras.fecha', 'productos.nombre' ,'detalle_compras.cantidad', 'detalle_compras.precio_compra', 'detalle_compras.subtotal')->get();
 
         $this->fpdf->SetFont('Arial','B',10);
         $this->fpdf->Cell(10,10,'Datos del Proveedor',0,0,);
@@ -155,7 +153,7 @@ class ReportesController extends Controller
             $this->fpdf->Cell(50,8, $compra->codigo,1,0);
             $this->fpdf->Cell(40,8, Carbon::parse($compra->fecha)->format('d-m-Y') ,1,0,'C');
             $this->fpdf->Cell(35,8, $compra->cantidad,1,0,'C');
-            $this->fpdf->Cell(35,8, $compra->precio_unitario,1,0,'C');
+            $this->fpdf->Cell(35,8, $compra->precio_compra,1,0,'C');
             $this->fpdf->Cell(35,8, $compra->subtotal,1,0);
             $this->fpdf->Ln();
             $a_monto[] = $compra->subtotal;
@@ -185,7 +183,7 @@ class ReportesController extends Controller
 
         if (!empty($fecha_ini) && !empty($fecha_fin)) { $query->whereBetween('compras.fecha', [$fecha_ini, $fecha_fin ]); }
 
-        $detalle_compra = $query->selectRaw('compras.tipo, compras.fecha, detalle_compras.cantidad, detalle_compras.subtotal, 0, 0, detalle_compras.historial_stock, productos.precio_unitario');
+        $detalle_compra = $query->selectRaw('compras.tipo, compras.fecha, detalle_compras.cantidad, detalle_compras.subtotal, 0, 0, detalle_compras.historial_stock, detalle_compras.precio_compra, 0');
 
         $query = DB::table('detalle_ventas')
             ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
@@ -195,7 +193,7 @@ class ReportesController extends Controller
 
         if (!empty($fecha_ini) && !empty($fecha_fin)) { $query->whereBetween('ventas.fecha', [$fecha_ini, $fecha_fin ]); }
 
-        return $query->selectRaw('ventas.tipo as detalle, ventas.fecha as fecha, 0 cantidad_ingreso, 0 subtotal_ingreso, detalle_ventas.cantidad cantidad_salida, detalle_ventas.subtotal subtotal_salida, detalle_ventas.historial_stock stock, productos.precio_unitario')
+        return $query->selectRaw('ventas.tipo as detalle, ventas.fecha as fecha, 0 cantidad_ingreso, 0 subtotal_ingreso, detalle_ventas.cantidad cantidad_salida, detalle_ventas.subtotal subtotal_salida, detalle_ventas.historial_stock stock, 0 as precio_compra, detalle_ventas.precio_venta as precio_venta')
             ->unionAll($detalle_compra)
             ->orderBy('fecha')
             ->get();
@@ -214,11 +212,9 @@ class ReportesController extends Controller
         $this->fpdf->SetFont('Arial','',10);
         $this->fpdf->Cell(20,5,'Nombre: '. $producto['nombre']);
         $this->fpdf->Ln();
-        $this->fpdf->Cell(20,5,'Detalle: '. $producto['descripcion']);
+        $this->fpdf->Cell(20,5,'Detalle: '. Str::substr($producto['descripcion'], 0, 40));
         $this->fpdf->Ln();
         $this->fpdf->Cell(20,5,'Sub Categoria:'. $producto['subcategoria']['nombre']);
-        $this->fpdf->Ln();
-        $this->fpdf->Cell(20,5,'Precio Uni: '. $producto['precio_unitario']);
         $this->fpdf->Ln();
         $this->fpdf->Cell(20,5,'Stock Actual: '. $producto['stock']);
         $this->fpdf->Ln(8);
@@ -251,10 +247,10 @@ class ReportesController extends Controller
             $this->fpdf->Cell(30,8, Carbon::parse($kardex->fecha)->format('d-m-Y') ,1,0,'C');
             $this->fpdf->Cell(20,8, $kardex->detalle,1,0);
             $this->fpdf->Cell(20,8, $kardex->cantidad_ingreso,1,0,'C');
-            $this->fpdf->Cell(20,8, $kardex->precio_unitario,1,0,'C');
+            $this->fpdf->Cell(20,8, $kardex->precio_compra,1,0,'C');
             $this->fpdf->Cell(20,8, $kardex->subtotal_ingreso,1,0,'C');
             $this->fpdf->Cell(20,8, $kardex->cantidad_salida,1,0,'C');
-            $this->fpdf->Cell(20,8, $kardex->precio_unitario,1,0,'C');
+            $this->fpdf->Cell(20,8, $kardex->precio_venta,1,0,'C');
             $this->fpdf->Cell(20,8, $kardex->subtotal_salida,1,0,'C');
             $this->fpdf->Cell(20,8, $kardex->stock,1,0, 'C');
             $this->fpdf->Ln();
@@ -277,7 +273,7 @@ class ReportesController extends Controller
         $detalle_compra = DB::table('detalle_compras')
             ->join('compras', 'compras.id', '=', 'detalle_compras.compra_id')
             ->join('productos', 'productos.id', '=', 'detalle_compras.producto_id')
-            ->selectRaw('productos.nombre, productos.precio_unitario, detalle_compras.cantidad, detalle_compras.subtotal')
+            ->selectRaw('productos.nombre, detalle_compras.precio_compra, detalle_compras.cantidad, detalle_compras.subtotal')
             ->where('compras.id', $compra_id)
             ->get();
 
@@ -313,7 +309,7 @@ class ReportesController extends Controller
 
         foreach ($detalle_compra as $detalle) {
             $this->fpdf->Cell(65,8, $detalle->nombre,1,0);
-            $this->fpdf->Cell(40,8, $detalle->precio_unitario,1,0,'C');
+            $this->fpdf->Cell(40,8, $detalle->precio_compra,1,0,'C');
             $this->fpdf->Cell(40,8, $detalle->cantidad,1,0,'C');
             $this->fpdf->Cell(40,8, $detalle->subtotal,1,0,'C');
             $this->fpdf->Ln();
@@ -347,7 +343,7 @@ class ReportesController extends Controller
         $detalle_venta = DB::table('detalle_ventas')
             ->join('ventas', 'ventas.id', '=', 'detalle_ventas.venta_id')
             ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
-            ->selectRaw('productos.nombre, productos.precio_unitario, detalle_ventas.cantidad, detalle_ventas.subtotal')
+            ->selectRaw('productos.nombre, detalle_ventas.precio_venta, detalle_ventas.cantidad, detalle_ventas.subtotal')
             ->where('ventas.id', $venta_id)
             ->get();
 
@@ -385,7 +381,7 @@ class ReportesController extends Controller
 
         foreach ($detalle_venta as $detalle) {
             $this->fpdf->Cell(65,8, $detalle->nombre,1,0);
-            $this->fpdf->Cell(40,8, $detalle->precio_unitario,1,0,'C');
+            $this->fpdf->Cell(40,8, $detalle->precio_venta,1,0,'C');
             $this->fpdf->Cell(40,8, $detalle->cantidad,1,0,'C');
             $this->fpdf->Cell(40,8, $detalle->subtotal,1,0,'C');
             $this->fpdf->Ln();

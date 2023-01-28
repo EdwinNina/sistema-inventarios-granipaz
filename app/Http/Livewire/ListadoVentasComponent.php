@@ -30,7 +30,7 @@ class ListadoVentasComponent extends Component
         $this->productos = DB::table('detalle_ventas')
             ->join('productos', 'productos.id', '=', 'detalle_ventas.producto_id')
             ->where('detalle_ventas.venta_id', '=', $venta_id)
-            ->select('productos.nombre', 'productos.precio_unitario', 'detalle_ventas.cantidad', 'detalle_ventas.subtotal')
+            ->select('productos.nombre', 'detalle_ventas.precio_venta', 'detalle_ventas.cantidad', 'detalle_ventas.subtotal')
             ->get();
 
         $this->modalToggle = true;

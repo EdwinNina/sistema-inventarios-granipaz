@@ -15,7 +15,8 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="py-3 px-6">Nombre</th>
-                            <th scope="col" class="py-3 px-6">P.U.</th>
+                            <th scope="col" class="py-3 px-6">Categoria</th>
+                            <th scope="col" class="py-3 px-6">Subcategoria</th>
                             <th scope="col" class="py-3 px-6">Stock</th>
                             <th scope="col" class="py-3 px-6">Accion</th>
                         </tr>
@@ -24,7 +25,8 @@
                         @foreach ($productos as $producto)
                             <tr class="bg-white border-b hover:bg-gray-50">
                                 <th class="py-4 px-6">{{ $producto->nombre }}</th>
-                                <td class="py-4 px-6">{{ $producto->precio_unitario }}</td>
+                                <td class="py-4 px-6">{{ $producto->subcategoria->categoria->nombre }}</td>
+                                <td class="py-4 px-6">{{ $producto->subcategoria->nombre }}</td>
                                 <td class="py-4 px-6 font-bold {{ $producto->stock > $stock_minimo ? 'text-green-500' : 'text-red-500' }}">{{ $producto->stock }}</td>
                                 <td class="py-4 px-6">
                                     <button type="button" class="bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 rounded-full h-10 w-10 flex justify-center items-center"

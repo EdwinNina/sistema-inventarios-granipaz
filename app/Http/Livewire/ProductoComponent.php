@@ -19,7 +19,7 @@ class ProductoComponent extends Component
     use WithFileUploads;
 
     public $modalToggle = false, $stock_minimo, $actualizar_imagen = false;
-    public $productoId, $nombre, $descripcion, $precio_unitario, $sub_categoria_id, $imagen, $categoria_seleccionada;
+    public $productoId, $nombre, $descripcion, $sub_categoria_id, $imagen, $categoria_seleccionada;
     public $a_subcategorias, $modalToggleDetalle, $detalle;
     public $buscar = '', $filtrarSubCategoria = '';
 
@@ -45,7 +45,8 @@ class ProductoComponent extends Component
                 return $query->where('productos.sub_categoria_id', $this->filtrarSubCategoria);
             })
             ->join('sub_categorias', 'sub_categorias.id','=','productos.sub_categoria_id')
-            ->select('productos.*','sub_categorias.nombre as sub_categoria')
+            ->join('categorias', 'categorias.id','=','sub_categorias.categoria_id')
+            ->select('productos.*','sub_categorias.nombre as sub_categoria', 'categorias.nombre as categoria')
             ->orderBy('nombre')
             ->paginate(5);
 
@@ -57,7 +58,6 @@ class ProductoComponent extends Component
     private function resetInputs(){
         $this->nombre = '';
         $this->descripcion = '';
-        $this->precio_unitario = '';
         $this->sub_categoria_id = '';
         $this->categoria_seleccionada = '';
         $this->imagen = '';
@@ -66,7 +66,6 @@ class ProductoComponent extends Component
     public function rules(){
         return [
             'nombre' => 'required',
-            'precio_unitario' => 'required',
             'sub_categoria_id' => 'required',
             'imagen' => 'required|image|max:2048',
         ];
@@ -87,7 +86,6 @@ class ProductoComponent extends Component
         Producto::create([
             'nombre' => mb_strtolower($this->nombre),
             'descripcion' => mb_strtolower($this->descripcion),
-            'precio_unitario' => $this->precio_unitario,
             'sub_categoria_id' => $this->sub_categoria_id,
             'imagen' => $this->imagen->store('productos','public'),
         ]);
@@ -114,7 +112,6 @@ class ProductoComponent extends Component
         $this->productoId = $producto->id;
         $this->nombre = $producto->nombre;
         $this->descripcion = $producto->descripcion;
-        $this->precio_unitario = $producto->precio_unitario;
         $this->sub_categoria_id = $producto->sub_categoria_id;
         $this->imagen = $producto->imagen;
         $this->modalToggle = true;
@@ -124,7 +121,6 @@ class ProductoComponent extends Component
         $producto = Producto::find($this->productoId);
         $producto->nombre = $this->nombre;
         $producto->descripcion = $this->descripcion;
-        $producto->precio_unitario = $this->precio_unitario;
         $producto->sub_categoria_id = $this->sub_categoria_id;
 
         if($this->actualizar_imagen){

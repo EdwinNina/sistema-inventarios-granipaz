@@ -41,8 +41,8 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="py-3 px-6">Nombre</th>
-                            <th scope="col" class="py-3 px-6">Precio Uni (Bs)</th>
                             <th scope="col" class="py-3 px-6">Stock</th>
+                            <th scope="col" class="py-3 px-6">Categoria</th>
                             <th scope="col" class="py-3 px-6">SubCategoria</th>
                             <th scope="col" class="py-3 px-6">Estado</th>
                             <th scope="col" class="py-3 px-6 text-center">Acciones</th>
@@ -52,11 +52,11 @@
                         @foreach ($productos as $producto)
                             <tr class="bg-white border-b hover:bg-gray-50">
                                 <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{{ Str::title($producto->nombre) }}</th>
-                                <td class="py-4 px-6">{{ $producto->precio_unitario }}</td>
                                 <td class="py-4 px-6">
-                                    <span class="w-9 h-9 text-xs rounded-full flex justify-center items-center font-bold text-white
-                                        {{ $producto->stock > $stock_minimo ? 'bg-green-500' : 'bg-red-500' }}">{{ $producto->stock }}</span>
+                                    <span class="flex justify-start items-center font-bold
+                                        {{ $producto->stock > $stock_minimo ? 'text-green-500' : 'text-red-500' }}">{{ $producto->stock }}</span>
                                 </td>
+                                <td class="py-4 px-6">{{ $producto->categoria }}</td>
                                 <td class="py-4 px-6">{{ $producto->sub_categoria }}</td>
                                 <td class="py-4 px-6">
                                     <span class="py-2 px-3 text-white rounded-3xl {{ $producto->estado ? 'bg-green-500' : 'bg-red-500' }}">{{ $producto->estado ? 'Activo' : 'Inactivo' }}</span>

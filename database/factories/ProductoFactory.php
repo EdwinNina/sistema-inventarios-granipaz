@@ -23,7 +23,7 @@ class ProductoFactory extends Factory
             'descripcion' => $this->faker->text('150'),
             'imagen' => 'productos/' . $this->faker->image('public/storage/productos', 500, 500, null, false),
             'stock' => $this->faker->numberBetween(1, 50),
-            'precio_unitario' => $this->faker->randomFloat(2, 1, 5),
+            // 'precio_unitario' => $this->faker->randomFloat(2, 1, 5),
             'sub_categoria_id' => SubCategoria::get()->random()->id
         ];
     }

@@ -34,11 +34,11 @@ class ProductosCarritoComponent extends Component
                 'stock' => $producto->stock,
                 'cantidad' => $cantidad,
                 'medida' => $producto->medida,
-                'precio' => $producto->precio_unitario,
-                'subtotal' => $cantidad * $producto->precio_unitario
+                'precio' => 0,
+                'subtotal' => 0
             );
         }else{
-            $this->productos[$producto->id]['cantidad']++;
+            $this->productos[$producto->id]['cantidad'] += 1;
             $this->productos[$producto->id]['subtotal'] = $this->productos[$producto->id]['cantidad'] * $this->productos[$producto->id]['precio'];
         }
         $this->total = $this->obtenerTotal();
@@ -46,6 +46,10 @@ class ProductosCarritoComponent extends Component
 
     function obtenerTotal(){
         return array_sum(array_column($this->productos, 'subtotal'));
+    }
+
+    public function cambiarPrecioProducto($indice, $cantidad){
+        $this->productos[$indice]['precio'] = $cantidad;
     }
 
     public function aumentarCantidadManual($indice, $cantidad){

@@ -9,5 +9,5 @@ class DetalleCompra extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['cantidad', 'subtotal', 'compra_id', 'producto_id'];
+    protected $fillable = ['cantidad', 'subtotal', 'compra_id', 'producto_id', 'precio_compra'];
 }

@@ -41,21 +41,13 @@
                         @error('sub_categoria_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                 </div>
-                <div class="form-control w-full mt-2">
-                    <label class="label">
-                        <span class="label-text">Precio de Unitario *</span>
-                    </label>
-                    <input type="text" placeholder="Ingrese el precio de compra del producto"
-                        class="input input-bordered w-full @error('precio_unitario') input-error @enderror" wire:model.defer="precio_unitario"/>
-                    @error('precio_unitario') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                </div>
             </section>
             <section>
                 <div class="bg-gray-400 w-full h-52">
                     @if ($imagen && $actualizar_imagen)
-                        <img src="{{ $imagen->temporaryUrl() }}" class="w-full h-52 object-fill">
+                        <img src="{{ $imagen->temporaryUrl() }}" class="w-full h-52 object-cover">
                     @elseif ($imagen)
-                        <img src="{{ Storage::url($imagen) }}" class="w-full h-52 object-fill">
+                        <img src="{{ Storage::url($imagen) }}" class="w-full h-52 object-cover">
                     @endif
                 </div>
                 <div class="form-control w-full">
