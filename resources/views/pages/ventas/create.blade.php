@@ -36,7 +36,7 @@
                                     class="select select-bordered w-full @error('proveedor') select-error @enderror" name="cliente">
                                     <option value="" selected disabled>Seleccionar Cliente</option>
                                     @foreach ($clientes as $cliente)
-                                        <option value="{{ $cliente->id }}">{{ $cliente->empresa }}</option>
+                                        <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
                                     @endforeach
                                 </select>
                                 @error('cliente')

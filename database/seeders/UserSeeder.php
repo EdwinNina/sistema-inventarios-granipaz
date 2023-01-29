@@ -21,5 +21,12 @@ class UserSeeder extends Seeder
             'password' => bcrypt('grover123-G'),
             'role_id' => 1
         ]);
+
+        User::create([
+            'name' => 'Administrador',
+            'email' => 'adminSystem@granipaz.com',
+            'password' => bcrypt('adminSystem'),
+            'role_id' => 1
+        ]);
     }
 }

@@ -18,7 +18,7 @@ class ComprasController extends Controller
 
     public function __construct()
     {
-        $this->proveedores = Persona::where('estado', 1)->where('tipo_persona', 'PROVEEDOR')->select('id', 'empresa')->get();
+        $this->proveedores = Persona::where('estado', 1)->where('tipo_persona', 'PROVEEDOR')->select('id', 'nombre')->get();
     }
     /**
      * Display a listing of the resource.

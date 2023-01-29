@@ -40,7 +40,7 @@
                                     name="proveedor">
                                     <option value="" selected disabled>Seleccionar proveedor</option>
                                     @foreach ($proveedores as $proveedor)
-                                        <option value="{{ $proveedor->id }}">{{ $proveedor->empresa }}</option>
+                                        <option value="{{ $proveedor->id }}">{{ $proveedor->nombre }}</option>
                                     @endforeach
                                 </select>
                                 @error('proveedor')

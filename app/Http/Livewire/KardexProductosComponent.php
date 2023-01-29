@@ -19,7 +19,7 @@ class KardexProductosComponent extends Component
         $empresa = Empresa::first();
         $this->categorias = Categoria::where('estado', 1)->select('id','nombre')->get();
         $this->resetBusqueda();
-        $this->stock_minimo = $empresa->stock_minimo;
+        $this->stock_minimo = $empresa->stock_minimo ?? 10;
         $this->a_subcategorias = [];
     }
 

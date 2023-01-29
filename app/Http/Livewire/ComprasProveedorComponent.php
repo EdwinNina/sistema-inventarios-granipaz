@@ -37,14 +37,14 @@ class ComprasProveedorComponent extends Component
                 ->join('productos', 'productos.id', '=' ,'detalle_compras.producto_id')
                 ->where('compras.proveedor_id', $this->proveedor)
                 ->whereBetween('compras.fecha', [$this->fecha_ini, $this->fecha_fin])
-                ->select('compras.codigo','compras.fecha', 'productos.nombre' ,'detalle_compras.cantidad', 'productos.precio_compra', 'detalle_compras.subtotal')
+                ->select('compras.codigo','compras.fecha', 'productos.nombre' ,'detalle_compras.cantidad', 'detalle_compras.precio_compra', 'detalle_compras.subtotal')
                 ->get();
         }else{
             $compras = DB::table('detalle_compras')
                 ->join('compras', 'compras.id', '=' ,'detalle_compras.compra_id')
                 ->join('productos', 'productos.id', '=' ,'detalle_compras.producto_id')
                 ->where('compras.proveedor_id', $this->proveedor)
-                ->select('compras.codigo','compras.fecha', 'productos.nombre' ,'detalle_compras.cantidad', 'productos.precio_compra', 'detalle_compras.subtotal')
+                ->select('compras.codigo','compras.fecha', 'productos.nombre' ,'detalle_compras.cantidad', 'detalle_compras.precio_compra', 'detalle_compras.subtotal')
                 ->get();
         }
 

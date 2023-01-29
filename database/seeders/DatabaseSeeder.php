@@ -28,10 +28,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
 
-        Categoria::factory(20)->create();
-        SubCategoria::factory(40)->create();
-        Producto::factory(50)->create();
-        Persona::factory(60)->create();
+        // Categoria::factory(20)->create();
+        // SubCategoria::factory(40)->create();
+        // Producto::factory(50)->create();
+        // Persona::factory(60)->create();
         Empresa::factory(1)->create();
     }
 }

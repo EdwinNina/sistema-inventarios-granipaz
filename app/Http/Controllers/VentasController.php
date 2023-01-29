@@ -20,7 +20,7 @@ class VentasController extends Controller
     {
         $this->clientes = Persona::where('estado', 1)
             ->where('tipo_persona', 'CLIENTE')
-            ->select('id', 'empresa')
+            ->select('id', 'nombre')
             ->get();
     }
 

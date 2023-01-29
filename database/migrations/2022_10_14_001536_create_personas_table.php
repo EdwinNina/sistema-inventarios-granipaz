@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('nombre', 50);
             $table->string('paterno', 50)->nullable();
             $table->string('materno', 50)->nullable();
-            $table->enum('tipo_documento', ['NIT', 'CI', 'PASAPORTE', 'RUA'])->nullable();
-            $table->string('nro_documento', 15)->unique()->nullable();
+            $table->string('tipo_documento',30)->nullable();
+            $table->string('nro_documento', 15)->nullable();
             $table->string('complemento', 10)->nullable();
             $table->string('empresa', 150)->nullable();
             $table->string('email', 60)->nullable();
